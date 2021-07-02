@@ -29,7 +29,7 @@ namespace MicroRabbit.Infra.IoC
             //Data 
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<BankingDbContext>();
-            services.AddMediatR(typeof(BankingDbContext));
+           // services.AddMediatR(typeof(BankingDbContext));
 
 
         }

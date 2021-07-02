@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Design;
-
+using MediatR;
 
 namespace MicroRabbit.Banking.Api
 {
@@ -33,9 +33,23 @@ namespace MicroRabbit.Banking.Api
                 options.UseSqlServer(Configuration.GetConnectionString("BankingDbConnection"));
             });
 
-            services.AddRazorPages();
-            RegisterServices(services);
 
+
+        //   services.AddRazorPages();
+            services.AddMvcCore().AddApiExplorer();
+
+           
+
+
+           services.AddMvc();
+            services.AddSwaggerGen(c => {
+
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Banking Microservice", Version = "v1 " });
+            });
+
+            services.AddMediatR(typeof(Startup));
+
+            RegisterServices(services);
         }
 
         private void RegisterServices(IServiceCollection services)
@@ -49,6 +63,8 @@ namespace MicroRabbit.Banking.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Banking Micoservice v1"));
             }
             else
             {
