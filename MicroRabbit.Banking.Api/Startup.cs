@@ -41,7 +41,7 @@ namespace MicroRabbit.Banking.Api
            
 
 
-           services.AddMvc();
+           services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddSwaggerGen(c => {
 
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Banking Microservice", Version = "v1 " });
@@ -82,7 +82,7 @@ namespace MicroRabbit.Banking.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }
