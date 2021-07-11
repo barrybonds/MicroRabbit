@@ -1,6 +1,9 @@
 using MediatR;
+using MicroRabbit.Domain.Core.Bus;
 using MicroRabbit.Infra.IoC;
 using MicroRabbit.Transfer.Data.Context;
+using MicroRabbit.Transfer.Domain.EventHandlers;
+using MicroRabbit.Transfer.Domain.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,7 +37,8 @@ namespace MicroRabbit.Transfer.Api
             //   services.AddRazorPages();
             services.AddMvcCore().AddApiExplorer();
             services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddSwaggerGen(c => {
+            services.AddSwaggerGen(c =>
+            {
 
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Transfer Microservice", Version = "v1 " });
             });
@@ -75,6 +79,14 @@ namespace MicroRabbit.Transfer.Api
             {
                 endpoints.MapControllers();
             });
+
+            ConfigureEventBus(app);
+        }
+
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
         }
     }
 }
